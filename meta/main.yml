@@ -1,0 +1,14 @@
+---
+galaxy_info:
+  author: Nimrod Adar
+  description: Gitolite installation.
+  company: Shore technologies.
+  license: MIT
+  min_ansible_version: 1.2
+  platforms:
+  - name: Debian
+    versions:
+    - jessie
+  categories:
+  - development
+dependencies: []
