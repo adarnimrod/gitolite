@@ -1,0 +1,14 @@
+<VirtualHost _default_:443>
+    Alias                   /cgit/css       /usr/share/cgit
+    ScriptAlias             /               /usr/lib/cgit/cgit.cgi/
+    #SSLEngine               on
+    #SSLCertificateFile      {{ tls_cert_path }}
+    #SSLCertificateKeyFile   {{ tls_key_path }}
+    #SSLProtocol             all -SSLv2 -SSLv3
+    #SSLCipherSuite          !kRSA:!3DES:!RC4:!DES:!MD5:!aNULL:!NULL:AESGCM+ECDH:AES256+ECDH:AES128:+SHA1;
+    #SSLHonorCipherOrder     on
+    #SSLCompression          off
+    #SSLOpenSSLConfCmd       DHParameters "/etc/ssl/dhparams.pem"
+    #ErrorLog                ${APACHE_LOG_DIR}/error.log
+    #CustomLog               ${APACHE_LOG_DIR}/access.log combined
+</virtualHost>

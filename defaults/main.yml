@@ -1,2 +1,4 @@
 ---
 # defaults file for ansible-gitolite
+
+gitolite_public_key:

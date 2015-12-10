@@ -1,0 +1,111 @@
+---
+# tasks file for cgit
+
+- assert:
+    that:
+      - ansible_os_family == 'Debian'
+
+- name: apt install
+  apt:
+      name: '{{ item }}'
+      state: present
+      update_cache: yes
+      cache_valid_time: 3600
+  with_items:
+      - cgit
+      - git
+      - apache2
+      - python-docutils
+
+- name: Allow Apache to access to gitolite repositories
+  user:
+    append: yes
+    name: www-data
+    groups: git
+    state: present
+  notify:
+  - Restart Apache
+
+- name: Enable CGI Apache module
+  apache2_module:
+      name: cgi
+      state: present
+  notify:
+      - Restart Apache
+
+- name: Add cgit Apache site
+  template:
+    src: cgit.conf.j2
+    dest: /etc/apache2/sites-enabled/cgit.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - Reload Apache
+
+- name: Add symlink for rst2html (hack, fixed in Stretch)
+  when: ansible_distribution_major_version < 9
+  file:
+      src: /usr/share/docutils/scripts/python2/rst2html
+      dest: /usr/local/bin/rst2html.py
+      owner: root
+      group: root
+      state: link
+
+- name: Configure cgit
+  lineinfile:
+      dest: /etc/cgitrc
+      line: '{{ item.line }}'
+      regexp: '{{ item.regexp|default(omit) }}'
+      insertbefore: '{{ item.insertbefore|default(omit) }}'
+  with_items:
+      - line: 'css=/cgit/css/cgit.css'
+        regexp: '^css='
+      - line: 'logo=/cgit/css/cgit.png'
+        regexp: '^logo='
+      - line: 'favicon=/cgit/css/favicon.ico'
+        regexp: '^favicon='
+      - line: 'about-filter=/usr/lib/cgit/filters/about-formatting.sh'
+        regexp: '^about-filter='
+        insertbefore: 'scan-path='
+      - line: 'enable-git-config=1'
+        regexp: '^enable-git-config='
+      - line: 'project-list=/srv/git/projects.list'
+        regexp: 'project-list='
+        insertbefore: 'scan-path='
+      - line: 'scan-path=/srv/git/repositories'
+        regexp: 'scan-path='
+      - line: 'readme=:README.md'
+      - line: 'readme=:readme.md'
+      - line: 'readme=:README.mkd'
+      - line: 'readme=:readme.mkd'
+      - line: 'readme=:README.rst'
+      - line: 'readme=:readme.rst'
+      - line: 'readme=:README.html'
+      - line: 'readme=:readme.html'
+      - line: 'readme=:README.htm'
+      - line: 'readme=:readme.htm'
+      - line: 'readme=:README.txt'
+      - line: 'readme=:readme.txt'
+      - line: 'readme=:README'
+      - line: 'readme=:readme'
+      - line: 'readme=:INSTALL.md'
+      - line: 'readme=:install.md'
+      - line: 'readme=:INSTALL.mkd'
+      - line: 'readme=:install.mkd'
+      - line: 'readme=:INSTALL.rst'
+      - line: 'readme=:install.rst'
+      - line: 'readme=:INSTALL.html'
+      - line: 'readme=:install.html'
+      - line: 'readme=:INSTALL.htm'
+      - line: 'readme=:install.htm'
+      - line: 'readme=:INSTALL.txt'
+      - line: 'readme=:install.txt'
+      - line: 'readme=:INSTALL'
+      - line: 'readme=:install'
+
+- name: Configure firewall
+  ufw:
+    rule: allow
+    port: 443
+    proto: tcp

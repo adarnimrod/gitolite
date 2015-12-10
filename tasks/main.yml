@@ -1,2 +1,60 @@
 ---
 # tasks file for ansible-gitolite
+
+- assert:
+   that:
+   - gitolite_public_key is defined
+   - ansible_os_family == 'Debian'
+
+- name: apt install
+  apt:
+    name: gitolite3
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Create gitolite user
+  user:
+    name: git
+    system: yes
+    createhome: yes
+    home: /srv/git
+    shell: /bin/sh
+    state: present
+
+- name: Copy SSH public key
+  template:
+   src: gitolite.pub.j2
+   dest: /srv/git/gitolite.pub
+   owner: git
+   group: git
+   mode: '0644'
+
+- name: Setup gitolite
+  become: yes
+  become_user: git
+  command: '/usr/bin/gitolite setup -pk /srv/git/gitolite.pub'
+  register: gitolite_setup
+  changed_when: "'Initialized empty Git repository' in gitolite_setup.stderr"
+
+- name: Relax permission for cgit integration
+  with_items:
+  - path: /srv/git/repositories
+    mode: '0750'
+  - path: /srv/git/projects.list
+    mode: '0640'
+  file:
+    path: '{{ item.path }}'
+    mode: '{{ item.mode }}'
+    owner: git
+    group: git
+
+- name: Add daily backup job
+  copy:
+    src: backup.sh
+    dest: /etc/cron.daily/git
+    owner: root
+    group: root
+    mode: '0755'
+
+- include: cgit.yml
