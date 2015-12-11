@@ -103,9 +103,3 @@
       - line: 'readme=:install.txt'
       - line: 'readme=:INSTALL'
       - line: 'readme=:install'
-
-- name: Configure firewall
-  ufw:
-    rule: allow
-    port: 443
-    proto: tcp
