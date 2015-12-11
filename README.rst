@@ -46,6 +46,8 @@ at: https://www.shore.co.il/cgit/.
 TODO
 ----
 
+- Test repository config with cgit.
+- Investigate hook (like deploying, etc.)
 - Test integration with ssh_ca.
 - Include dependencies in `meta/main.yml` and test.
 - Log to syslog.
