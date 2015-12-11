@@ -49,6 +49,24 @@
     owner: git
     group: git
 
+- name: Configure
+  with_items:
+  - line: 'UMASK => 0027,'
+    regexp: '^[ ]*UMASK '
+  - line: "GIT_CONFIG_KEYS => '.*',"
+    regexp: '^[ ]*GIT_CONFIG_KEYS '
+  - line: 'LOG_DEST => syslog,'
+    regexp: '[ ]*LOG_DEST '
+    insertafter: '%RC = \('
+  - line: "'cgit',"
+    regexp: "^[ ]*'cgit',"
+    insertafter: 'ENABLE => \['
+  lineinfile:
+    dest: /srv/git/.gitolite.rc
+    line: '{{ item.line }}'
+    regexp: '{{ item.regexp }}'
+    insertafter: '{{ item.insertafter|default(omit) }}'
+
 - name: Add daily backup job
   copy:
     src: backup.sh

@@ -44,7 +44,7 @@
     - Reload Apache
 
 - name: Add symlink for rst2html (hack, fixed in Stretch)
-  when: ansible_distribution_major_version < 9
+  when: ansible_distribution_major_version|int < 9
   file:
       src: /usr/share/docutils/scripts/python2/rst2html
       dest: /usr/local/bin/rst2html.py
@@ -70,6 +70,9 @@
         insertbefore: 'scan-path='
       - line: 'enable-git-config=1'
         regexp: '^enable-git-config='
+      - line: 'remove-suffix=1'
+        regexp: '^remove-suffix='
+        insertbefore: 'scan-path='
       - line: 'project-list=/srv/git/projects.list'
         regexp: 'project-list='
         insertbefore: 'scan-path='
