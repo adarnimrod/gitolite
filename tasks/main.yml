@@ -7,8 +7,11 @@
    - ansible_os_family == 'Debian'
 
 - name: apt install
+  with_items:
+  - gitolite3
+  - curl
   apt:
-    name: gitolite3
+    name: '{{ item }}'
     state: present
     update_cache: yes
     cache_valid_time: 3600
