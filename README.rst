@@ -1,4 +1,4 @@
-Ansible-gitolite
+Gitolite
 ################
 
 An Ansible role for provisioning gitolite and a readonly cgit web interface
@@ -7,33 +7,43 @@ An Ansible role for provisioning gitolite and a readonly cgit web interface
 Requirements
 ------------
 
-Debian Jessie.
+See :code:`meta/main.yml` and assertions at top of :code:`tasks/main.yml`.
 
 Role Variables
 --------------
-::
 
-    gitolite_public_key_path: #Path to the SSH public key for the admin account.
+See :code:`defaults/main.yml`.
 
 Dependencies
 ------------
 
-`Common role <https://www.shore.co.il/cgit/ansible-common/>`_
-`Apache role <https://www.shore.co.il/cgit/ansible-apache/>`_
+See :code:`meta/main.yml`.
 
 Example Playbook
 ----------------
-::
 
-    - hosts: servers
-      roles:
-      - role: gitolite
-        gitolite_public_key: '{{ lookup ("file", "id_rsa.pub") }}'
+See :code:`tests/playbook.yml`.
+
+Testing
+-------
+
+To install the dependencies:
+
+.. code:: shell
+
+    ansible-galaxy install git+file://$(pwd),$(git rev-parse --abbrev-ref HEAD) -p .molecule/roles
+
+To run the full test suite:
+
+.. code:: shell
+
+    molecule test
 
 License
 -------
 
-MIT
+This software is licensed under the MIT license (see the :code:`LICENSE.txt`
+file).
 
 Author Information
 ------------------
@@ -41,7 +51,7 @@ Author Information
 Nimrod Adar, `contact me <nimrod@shore.co.il>`_ or visit my `website
 <https://www.shore.co.il/>`_. Patches are welcome via `git send-email
 <http://git-scm.com/book/en/v2/Git-Commands-Email>`_. The repository is located
-at: https://www.shore.co.il/cgit/.
+at: https://www.shore.co.il/git/.
 
 TODO
 ----
