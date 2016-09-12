@@ -1,4 +1,4 @@
 ---
-# defaults file for ansible-gitolite
+# defaults file for ansible-role-gitolite
 
 gitolite_public_key:
