@@ -62,3 +62,8 @@ TODO
 - Include dependencies in `meta/main.yml` and test.
 - Log to syslog.
 - Metrics?
+- Rebase on ansible-role-example.
+- Flush handlers and wait for service to come up.
+- Add mail alias.
+- Remove dependency on the common role, use specific roles.
+- Tests.
