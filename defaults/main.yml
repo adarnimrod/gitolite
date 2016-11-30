@@ -1,5 +1,4 @@
 ---
-# defaults file for ansible-role-gitolite
-
+# defaults file for gitolite
 # Content of the SSH public key for the gitolite admin account.
 gitolite_public_key:

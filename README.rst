@@ -1,13 +1,15 @@
 Gitolite
-################
+########
 
-An Ansible role for provisioning gitolite and a readonly cgit web interface
-(served by Apache).
+.. image:: https://travis-ci.org/adarnimrod/gitolite.svg?branch=master
+    :target: https://travis-ci.org/adarnimrod/gitolite
+
+Provision Gitolite and a readonly cgit web interface served by Apache.
 
 Requirements
 ------------
 
-See :code:`meta/main.yml` and assertions at top of :code:`tasks/main.yml`.
+See :code:`meta/main.yml` and assertions at the top of :code:`tasks/main.yml`.
 
 Role Variables
 --------------
@@ -27,17 +29,22 @@ See :code:`tests/playbook.yml`.
 Testing
 -------
 
-To install the dependencies:
+Testing requires Python 2.7 and either Docker or Vagrant and Virtualbox.
+Install the Python dependencies, dependent roles and roles required for
+testing:
 
 .. code:: shell
 
+    pip install -r tests/requirements.txt
     ansible-galaxy install git+file://$(pwd),$(git rev-parse --abbrev-ref HEAD) -p .molecule/roles
+    molecule dependency
 
 To run the full test suite:
 
 .. code:: shell
 
-    molecule test
+    pre-commit run --all-files
+    molecule test --platform all
 
 License
 -------
@@ -62,7 +69,6 @@ TODO
 - Include dependencies in `meta/main.yml` and test.
 - Log to syslog.
 - Metrics?
-- Rebase on ansible-role-example.
 - Flush handlers and wait for service to come up.
 - Add mail alias.
 - Remove dependency on the common role, use specific roles.

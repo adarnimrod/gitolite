@@ -1,11 +1,6 @@
 ---
 # tasks file for cgit
-
-- assert:
-    that:
-      - ansible_os_family == 'Debian'
-
-- name: apt install
+- name: APT install cgit
   apt:
       name: '{{ item }}'
       state: present

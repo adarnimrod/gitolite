@@ -1,5 +1,20 @@
 ---
-- hosts: all
+- hosts: gitolite-openbsd
   gather_facts: false
+  roles: [adarnimrod.openbsd-bootstrap]
+
+- hosts: gitolite-xenial
+  gather_facts: false
+  roles: [adarnimrod.debian-bootstrap]
+
+- hosts: all
+  pre_tasks:
+      - name: Create SSH keypair
+        local_action: command ssh-keygen -t rsa -N '' -f files/id_rsa
+        run_once: True
+        become: False
+        args:
+            creates: files/id_rsa
   roles:
-    - role: ansible-role-example
+    - role: gitolite
+      gitolite_public_key: '{{ lookup("file", "id_rsa.pub") }}'
