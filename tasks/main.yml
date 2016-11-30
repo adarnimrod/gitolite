@@ -6,7 +6,7 @@
    - gitolite_public_key is defined
    - ansible_os_family == 'Debian'
 
-- name: apt install
+- name: APT install
   with_items:
   - gitolite3
   - curl
@@ -31,7 +31,7 @@
    dest: /srv/git/gitolite.pub
    owner: git
    group: git
-   mode: '0644'
+   mode: 0o0644
 
 - name: Setup gitolite
   become: yes
@@ -43,9 +43,9 @@
 - name: Relax permission for cgit integration
   with_items:
   - path: /srv/git/repositories
-    mode: '0750'
+    mode: 0o0750
   - path: /srv/git/projects.list
-    mode: '0640'
+    mode: 0o0640
   file:
     path: '{{ item.path }}'
     mode: '{{ item.mode }}'
@@ -76,6 +76,6 @@
     dest: /etc/cron.daily/git
     owner: root
     group: root
-    mode: '0755'
+    mode: 0o0755
 
 - include: cgit.yml
