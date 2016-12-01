@@ -34,7 +34,7 @@
     dest: /etc/apache2/sites-enabled/cgit.conf
     owner: root
     group: root
-    mode: '0644'
+    mode: 0o0644
   notify:
     - Reload Apache
 
