@@ -18,7 +18,7 @@
 
 - name: Enable CGI Apache module (always changes)
   apache2_module:
-    name: cgi
+    name: cgid
     state: present
   notify:
   - Restart Apache
