@@ -4,13 +4,10 @@
   assert:
     that:
         - ansible_os_family in ['Debian']
-        - ansible_distribution_release in ['xenial', 'trusty', 'jessie']
+        - ansible_distribution_release in ['xenial', 'jessie']
         - gitolite_public_key is defined
 
 - name: APT install
-  with_items:
-  - gitolite3
-  - curl
   apt:
     name: ['curl', 'gitolite3']
     state: present

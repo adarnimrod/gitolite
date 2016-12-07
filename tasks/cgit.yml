@@ -2,15 +2,10 @@
 # tasks file for cgit
 - name: APT install cgit
   apt:
-      name: '{{ item }}'
-      state: present
-      update_cache: yes
-      cache_valid_time: 3600
-  with_items:
-      - cgit
-      - git
-      - apache2
-      - python-docutils
+    name: ['cgit', 'python-docutils']
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
 
 - name: Allow Apache to access to gitolite repositories
   user:
@@ -23,10 +18,10 @@
 
 - name: Enable CGI Apache module (always changes)
   apache2_module:
-      name: cgi
-      state: present
+    name: cgi
+    state: present
   notify:
-      - Restart Apache
+  - Restart Apache
 
 - name: Add cgit Apache site
   template:
@@ -38,66 +33,65 @@
   notify:
     - Reload Apache
 
-- name: Add symlink for rst2html (hack, fixed in Stretch)
-  when: ansible_distribution_major_version|int < 9
+- name: Add symlink for rst2html (workaround, bug fixed in Stretch)
   file:
-      src: /usr/share/docutils/scripts/python2/rst2html
-      dest: /usr/local/bin/rst2html.py
-      owner: root
-      group: root
-      state: link
+    src: /usr/share/docutils/scripts/python2/rst2html
+    dest: /usr/local/bin/rst2html.py
+    owner: root
+    group: root
+    state: link
 
 - name: Configure cgit
   lineinfile:
-      dest: /etc/cgitrc
-      line: '{{ item.line }}'
-      regexp: '{{ item.regexp|default(omit) }}'
-      insertbefore: '{{ item.insertbefore|default(omit) }}'
+    dest: /etc/cgitrc
+    line: '{{ item.line }}'
+    regexp: '{{ item.regexp|default(omit) }}'
+    insertbefore: '{{ item.insertbefore|default(omit) }}'
   with_items:
-      - line: 'css=/cgit/css/cgit.css'
-        regexp: '^css='
-      - line: 'logo=/cgit/css/cgit.png'
-        regexp: '^logo='
-      - line: 'favicon=/cgit/css/favicon.ico'
-        regexp: '^favicon='
-      - line: 'about-filter=/usr/lib/cgit/filters/about-formatting.sh'
-        regexp: '^about-filter='
-        insertbefore: 'scan-path='
-      - line: 'enable-git-config=1'
-        regexp: '^enable-git-config='
-      - line: 'remove-suffix=1'
-        regexp: '^remove-suffix='
-        insertbefore: 'scan-path='
-      - line: 'project-list=/srv/git/projects.list'
-        regexp: 'project-list='
-        insertbefore: 'scan-path='
-      - line: 'scan-path=/srv/git/repositories'
-        regexp: 'scan-path='
-      - line: 'readme=:README.md'
-      - line: 'readme=:readme.md'
-      - line: 'readme=:README.mkd'
-      - line: 'readme=:readme.mkd'
-      - line: 'readme=:README.rst'
-      - line: 'readme=:readme.rst'
-      - line: 'readme=:README.html'
-      - line: 'readme=:readme.html'
-      - line: 'readme=:README.htm'
-      - line: 'readme=:readme.htm'
-      - line: 'readme=:README.txt'
-      - line: 'readme=:readme.txt'
-      - line: 'readme=:README'
-      - line: 'readme=:readme'
-      - line: 'readme=:INSTALL.md'
-      - line: 'readme=:install.md'
-      - line: 'readme=:INSTALL.mkd'
-      - line: 'readme=:install.mkd'
-      - line: 'readme=:INSTALL.rst'
-      - line: 'readme=:install.rst'
-      - line: 'readme=:INSTALL.html'
-      - line: 'readme=:install.html'
-      - line: 'readme=:INSTALL.htm'
-      - line: 'readme=:install.htm'
-      - line: 'readme=:INSTALL.txt'
-      - line: 'readme=:install.txt'
-      - line: 'readme=:INSTALL'
-      - line: 'readme=:install'
+  - line: 'css=/cgit/css/cgit.css'
+    regexp: '^css='
+  - line: 'logo=/cgit/css/cgit.png'
+    regexp: '^logo='
+  - line: 'favicon=/cgit/css/favicon.ico'
+    regexp: '^favicon='
+  - line: 'about-filter=/usr/lib/cgit/filters/about-formatting.sh'
+    regexp: '^about-filter='
+    insertbefore: 'scan-path='
+  - line: 'enable-git-config=1'
+    regexp: '^enable-git-config='
+  - line: 'remove-suffix=1'
+    regexp: '^remove-suffix='
+    insertbefore: 'scan-path='
+  - line: 'project-list=/srv/git/projects.list'
+    regexp: 'project-list='
+    insertbefore: 'scan-path='
+  - line: 'scan-path=/srv/git/repositories'
+    regexp: 'scan-path='
+  - line: 'readme=:README.md'
+  - line: 'readme=:readme.md'
+  - line: 'readme=:README.mkd'
+  - line: 'readme=:readme.mkd'
+  - line: 'readme=:README.rst'
+  - line: 'readme=:readme.rst'
+  - line: 'readme=:README.html'
+  - line: 'readme=:readme.html'
+  - line: 'readme=:README.htm'
+  - line: 'readme=:readme.htm'
+  - line: 'readme=:README.txt'
+  - line: 'readme=:readme.txt'
+  - line: 'readme=:README'
+  - line: 'readme=:readme'
+  - line: 'readme=:INSTALL.md'
+  - line: 'readme=:install.md'
+  - line: 'readme=:INSTALL.mkd'
+  - line: 'readme=:install.mkd'
+  - line: 'readme=:INSTALL.rst'
+  - line: 'readme=:install.rst'
+  - line: 'readme=:INSTALL.html'
+  - line: 'readme=:install.html'
+  - line: 'readme=:INSTALL.htm'
+  - line: 'readme=:install.htm'
+  - line: 'readme=:INSTALL.txt'
+  - line: 'readme=:install.txt'
+  - line: 'readme=:INSTALL'
+  - line: 'readme=:install'
