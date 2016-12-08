@@ -23,16 +23,6 @@
   notify:
   - Restart Apache
 
-- name: Add cgit Apache site
-  template:
-    src: cgit.conf.j2
-    dest: /etc/apache2/sites-enabled/cgit.conf
-    owner: root
-    group: root
-    mode: 0o0644
-  notify:
-    - Reload Apache
-
 - name: Add symlink for rst2html (workaround, bug fixed in Stretch)
   file:
     src: /usr/share/docutils/scripts/python2/rst2html
